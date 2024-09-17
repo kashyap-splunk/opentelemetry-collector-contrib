@@ -22,12 +22,39 @@ import (
 	"go.opentelemetry.io/collector/consumer"
 )
 
+type receiver struct {
+	config        *Config
+	set           component.ReceiverCreateSettings
+	clientFactory interface{}
+	client        interface{}
+
+	metricsComponent interface{}
+	logsConsumer     consumer.Logs
+	metricsConsumer  consumer.Metrics
+}
+
 func newReceiver(
 	_ context.Context,
 	settings component.ReceiverCreateSettings,
 	config *Config,
-	nextConsumer consumer.Metrics,
 	clientFactory interface{},
-) (component.MetricsReceiver, error) {
+) (*receiver, error) {
 	return nil, fmt.Errorf("podman receiver is not supported on windows")
+}
+
+func (r *receiver) registerMetricsConsumer(mc consumer.Metrics, set component.ReceiverCreateSettings) error {
+	r.metricsConsumer = mc
+	return nil
+}
+
+func (r *receiver) registerLogsConsumer(mc consumer.Logs) error {
+	return nil
+}
+
+func (r *receiver) Shutdown(ctx context.Context) error {
+	return nil
+}
+
+func (r *receiver) Start(ctx context.Context, host component.Host) error {
+	return nil
 }
